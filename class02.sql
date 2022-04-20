@@ -20,5 +20,6 @@ CREATE TABLE actor(
 
 DROP TABLE IF EXISTS film_actor;
 CREATE TABLE film_actor(
-    
+    actor_id INT, 
+    film_id INT
 );
