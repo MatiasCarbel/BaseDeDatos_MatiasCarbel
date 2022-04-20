@@ -24,8 +24,8 @@ DROP TABLE IF EXISTS film_actor;
 CREATE TABLE film_actor(
     actor_id INT, 
     film_id INT,
-    FOREIGN KEY (actor_id) REFERENCES actor(actor_id),
-    FOREIGN KEY (film_id) REFERENCES film(film_id)
-);
+    constraint actor_fk FOREIGN KEY (actor_id) REFERENCES actor (actor_id),
+    constraint film_fk FOREIGN KEY (film_id) REFERENCES film (film_id)
+);  
 
 
