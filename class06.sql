@@ -43,3 +43,24 @@ WHERE
         WHERE
             c.customer_id = r.customer_id
     );
+
+select
+    c.first_name,
+    c.last_name
+from
+    customer c
+where
+    c.customer_id NOT IN (
+        select
+            r.customer_id
+        from
+            rental r
+        group by
+            r.customer_id
+        having
+            count(*) > 1
+    )
+order by
+    c.customer_id;
+
+#4
