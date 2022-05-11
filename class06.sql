@@ -29,11 +29,17 @@ WHERE
     );
 
 #3
-SELECT customer_id FROM customer WHERE customer_id NOT IN (SELECT
-    r1.customer_id
+SELECT
+    first_name,
+    last_name
 FROM
-    rental r1,
-    rental r2
+    customer c
 WHERE
-    r1.customer_id = r2.customer_id
-    AND r1.inventory_id <> r2.inventory_id);
+    1 =(
+        SELECT
+            COUNT(*)
+        FROM
+            rental r
+        WHERE
+            c.customer_id = r.customer_id
+    );
