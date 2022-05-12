@@ -28,7 +28,7 @@ WHERE
             film_actor
     );
 
-#3
+#3 hay dos opciones
 SELECT
     first_name,
     last_name
@@ -44,23 +44,22 @@ WHERE
             c.customer_id = r.customer_id
     );
 
-select
+SELECT
     c.first_name,
     c.last_name
-from
+FROM
     customer c
-where
+WHERE
     c.customer_id NOT IN (
-        select
+        SELECT
             r.customer_id
-        from
+        FROM
             rental r
-        group by
+        GROUP BY
             r.customer_id
-        having
+        HAVING
             count(*) > 1
     )
 order by
     c.customer_id;
-
 #4
