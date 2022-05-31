@@ -62,4 +62,45 @@ WHERE
     )
 order by
     c.customer_id;
+
 #4
+SELECT
+    first_name,
+    last_name,
+    GROUP_CONCAT()
+FROM
+    customer c
+WHERE
+    1 < (
+        SELECT
+            COUNT(*)
+        FROM
+            rental r
+        WHERE
+            c.customer_id = r.customer_id
+    );
+
+#5
+SELECT * FROM
+#Ejercicio de practica
+SELECT
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    GROUP_CONCAT(f.title)
+FROM
+    customer c
+    JOIN rental r ON c.customer_id = r.customer_id
+    JOIN inventory i ON r.inventory_id = i.inventory_id
+    JOIN film f ON i.film_id = f.film_id
+WHERE
+    1 < (
+        SELECT
+            COUNT(*)
+        FROM
+            rental r
+        WHERE
+            c.customer_id = r.customer_id
+    )
+GROUP BY
+    c.customer_id;
