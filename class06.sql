@@ -92,6 +92,8 @@ WHERE
 SELECT
     *
 FROM
+
+
     #Ejercicio de practica
 SELECT
     c.customer_id,
