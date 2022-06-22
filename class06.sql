@@ -63,11 +63,19 @@ WHERE
 order by
     c.customer_id;
 
-#4
+#4 Find customers that rented more than one film
 SELECT
-    first_name,
-    last_name,
-    GROUP_CONCAT()
+    c.customer_id,
+    c.first_name,
+    c.last_name,
+    (
+        SELECT
+            COUNT(*)
+        FROM
+            rental re
+        WHERE
+            c.customer_id = re.customer_id
+    )
 FROM
     customer c
 WHERE
@@ -81,8 +89,10 @@ WHERE
     );
 
 #5
-SELECT * FROM
-#Ejercicio de practica
+SELECT
+    *
+FROM
+    #Ejercicio de practica
 SELECT
     c.customer_id,
     c.first_name,
