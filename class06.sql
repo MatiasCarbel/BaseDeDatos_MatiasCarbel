@@ -88,13 +88,31 @@ WHERE
             c.customer_id = r.customer_id
     );
 
-#5
+#5 List the actors that acted in 'BETRAYED REAR' or in 'CATCH AMISTAD'
 SELECT
-    *
+    a.first_name,
+    a.last_name
 FROM
+    actor a
+WHERE
+    actor_id IN(
+        SELECT
+            fa.actor_id
+        FROM
+            film_actor fa
+        WHERE
+            fa.film_id IN(
+                SELECT
+                    f.film_id
+                FROM
+                    film f
+                WHERE
+                    title LIKE 'BETRAYED REAR'
+                    OR title LIKE 'CATCH AMISTAD'
+            )
+    );
 
-
-    #Ejercicio de practica
+#Ejercicio de practica
 SELECT
     c.customer_id,
     c.first_name,
