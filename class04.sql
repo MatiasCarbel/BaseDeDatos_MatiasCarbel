@@ -83,3 +83,5 @@ FROM
   INNER JOIN staff as sta ON sto.manager_staff_id = sta.staff_id
 WHERE
   sto.store_id = 2;
+
+  A
