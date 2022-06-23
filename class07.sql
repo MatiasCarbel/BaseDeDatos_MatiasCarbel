@@ -37,15 +37,7 @@ SELECT
     c.customer_id,
     c.first_name,
     c.last_name,
-    (
-        SELECT
-            MIN(amount)
-        FROM
-            payment p
-        WHERE
-            c.customer_id = p.customer_id
-    ) AS pay
+    (SELECT DISTINCT p.amount FROM payment p WHERE c.customer_id = p.customer_id)
+    AND p.amount <= ALL (SELECT p2.amount FROM payment p2 WHERE c.customer_id = p2.customer_id) 
 FROM
-    customer c
-ORDER BY
-    pay;
+    customer c;
