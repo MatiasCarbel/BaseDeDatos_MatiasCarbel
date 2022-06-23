@@ -132,8 +132,9 @@ WHERE
                     film f
                 WHERE
                     title LIKE 'BETRAYED REAR'
-            ) 
-    )AND a.actor_id NOT IN(
+            )
+    )
+    AND a.actor_id NOT IN(
         SELECT
             fa.actor_id
         FROM
@@ -146,9 +147,84 @@ WHERE
                     film f
                 WHERE
                     title LIKE 'CATCH AMISTAD'
-            ) 
+            )
     );
 
+#7 List the actors that acted in both 'BETRAYED REAR' and 'CATCH AMISTAD'
+SELECT
+    a.first_name,
+    a.last_name
+FROM
+    actor a
+WHERE
+    a.actor_id IN(
+        SELECT
+            fa.actor_id
+        FROM
+            film_actor fa
+        WHERE
+            fa.film_id IN(
+                SELECT
+                    f.film_id
+                FROM
+                    film f
+                WHERE
+                    title LIKE 'BETRAYED REAR'
+            )
+    )
+    AND a.actor_id IN(
+        SELECT
+            fa.actor_id
+        FROM
+            film_actor fa
+        WHERE
+            fa.film_id IN(
+                SELECT
+                    f.film_id
+                FROM
+                    film f
+                WHERE
+                    title LIKE 'CATCH AMISTAD'
+            )
+    );
+
+#8 List all the actors that didn't work in 'BETRAYED REAR' or 'CATCH AMISTAD'
+SELECT
+    a.first_name,
+    a.last_name
+FROM
+    actor a
+WHERE
+    a.actor_id NOT IN(
+        SELECT
+            fa.actor_id
+        FROM
+            film_actor fa
+        WHERE
+            fa.film_id IN(
+                SELECT
+                    f.film_id
+                FROM
+                    film f
+                WHERE
+                    title LIKE 'BETRAYED REAR'
+            )
+    )
+    OR a.actor_id NOT IN(
+        SELECT
+            fa.actor_id
+        FROM
+            film_actor fa
+        WHERE
+            fa.film_id IN(
+                SELECT
+                    f.film_id
+                FROM
+                    film f
+                WHERE
+                    title LIKE 'CATCH AMISTAD'
+            )
+    );
 # Ejercicio de practica
 SELECT
     c.customer_id,
