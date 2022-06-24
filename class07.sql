@@ -31,13 +31,27 @@ WHERE
             film f2
     );
 
-#3Generate a report with list of customers showing the lowest payments done by each of them.
+#3 Generate a report with list of customers showing the lowest payments done by each of them.
 #Show customer information, the address and the lowest amount, provide both solution using ALL and/or ANY and MIN.
 SELECT
     c.customer_id,
     c.first_name,
     c.last_name,
-    (SELECT DISTINCT p.amount FROM payment p WHERE c.customer_id = p.customer_id)
-    AND p.amount <= ALL (SELECT p2.amount FROM payment p2 WHERE c.customer_id = p2.customer_id) 
+    (
+        SELECT
+            DISTINCT p.amount
+        FROM
+            payment p
+        WHERE
+            c.customer_id = p.customer_id
+            AND p.amount <= ALL (
+                SELECT
+                    p2.amount
+                FROM
+                    payment p2
+                WHERE
+                    c.customer_id = p2.customer_id
+            )
+    ) AS lowest_payment
 FROM
     customer c;
