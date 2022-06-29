@@ -1,4 +1,4 @@
--- Active: 1654711325756@@127.0.0.1@3306@sakila
+-- Active: 1654711325756@@127.0.0.1@3306
 
 USE sakila;
 
@@ -85,3 +85,8 @@ FROM
 
 #4Generate a report that shows the customer's information 
 #with the highest payment and the lowest payment in the same row.
+SELECT customer.customer_id, first_name, last_name, CONCAT(max(payment.amount),'  ' ,min(payment.amount)) AS MaxMin
+FROM customer, payment 
+WHERE customer.customer_id = payment.customer_id 
+GROUP BY customer.customer_id, first_name, last_name;
+        
