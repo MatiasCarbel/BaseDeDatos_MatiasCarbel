@@ -1,4 +1,4 @@
--- Active: 1654711325756@@127.0.0.1@3306
+-- Active: 1654711325756@@127.0.0.1@3306@sakila
 
 USE sakila;
 
@@ -83,6 +83,7 @@ FROM
     customer c;
 
 
+
 #4Generate a report that shows the customer's information
 #with the highest payment and the lowest payment in the same row.
 SELECT
@@ -100,5 +101,3 @@ GROUP BY
     c.first_name,
     c.last_name;
     
-
-SELECT * FROM
