@@ -86,7 +86,7 @@ FROM
 #with the highest payment and the lowest payment in the same row.
 SELECT
     customer.customer_id,
-    first_name,
+    first_nam
     last_name,
     CONCAT(max(payment.amount), '  ', min(payment.amount)) AS 'Max Min'
 FROM
