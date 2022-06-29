@@ -82,8 +82,6 @@ SELECT
 FROM
     customer c;
 
-
-
 #4Generate a report that shows the customer's information
 #with the highest payment and the lowest payment in the same row.
 SELECT
