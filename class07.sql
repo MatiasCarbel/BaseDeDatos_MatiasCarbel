@@ -55,7 +55,6 @@ SELECT
                 WHERE
                     c.customer_id = p2.customer_id
             )
-            
     ) AS lowest_payment
 FROM
     customer c;
@@ -73,20 +72,29 @@ SELECT
             c.customer_id = p.customer_id
     ) as lowest_payment,
     (
-                SELECT
-                    a.address
-                FROM
-                    address a
-                WHERE
-                    c.address_id = a.address_id
-            )
+        SELECT
+            a.address
+        FROM
+            address a
+        WHERE
+            c.address_id = a.address_id
+    )
 FROM
     customer c;
 
-#4Generate a report that shows the customer's information 
+#4Generate a report that shows the customer's information
 #with the highest payment and the lowest payment in the same row.
-SELECT customer.customer_id, first_name, last_name, CONCAT(max(payment.amount),'  ' ,min(payment.amount)) AS MaxMin
-FROM customer, payment 
-WHERE customer.customer_id = payment.customer_id 
-GROUP BY customer.customer_id, first_name, last_name;
-        
+SELECT
+    customer.customer_id,
+    first_name,
+    last_name,
+    CONCAT(max(payment.amount), '  ', min(payment.amount)) AS 'Max Min'
+FROM
+    customer,
+    payment
+WHERE
+    customer.customer_id = payment.customer_id
+GROUP BY
+    customer.customer_id,
+    first_name,
+    last_name;
