@@ -1,4 +1,5 @@
 -- Active: 1654711325756@@127.0.0.1@3306@sakila
+
 USE sakila;
 
 #4 Find all the film titles that are not in the inventory.
@@ -27,15 +28,24 @@ SELECT
     r.return_date,
     i.film_id,
     f.title,
-    CONCAT(c.first_name,' ', c.last_name) AS 'Nombre',
+    CONCAT(c.first_name, ' ', c.last_name) AS 'Nombre',
     c.store_id
 FROM rental r
     INNER JOIN customer c ON r.customer_id = c.customer_id
     INNER JOIN inventory i ON r.inventory_id = i.inventory_id
     INNER JOIN film f ON i.film_id = f.film_id
-ORDER BY c.store_id, c.last_name;
+ORDER BY
+    c.store_id,
+    c.last_name;
 
 #7 Show sales per store (money of rented films)
 #show store's city, country, manager info and total sales (money)
 #(optional) Use concat to show city and country and manager first and last name
-SELECT sto.store_id FROM store sto INNER JOIN staff sta ON sto.manager_staff_id = sta.staff_id ;
+SELECT sto.store_id, CONCAT(sta.first_name,' ', sta.last_name), COUNT(pay.payment_id), SUM(pay.amount), CONCAT(co.country,' ' , ci.city)
+FROM store sto
+    INNER JOIN staff sta ON sto.manager_staff_id = sta.staff_id
+    INNER JOIN payment pay ON sta.staff_id = pay.staff_id
+    INNER JOIN address adr ON sto.address_id = adr.address_id
+    INNER JOIN city ci ON adr.city_id = ci.city_id
+    INNER JOIN country co ON ci.country_id = co.country_id
+    GROUP BY sto.store_id;
