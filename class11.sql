@@ -38,6 +38,11 @@ ORDER BY
     c.store_id,
     c.last_name;
 
+#8Which actor has appeared in the most films?
+
+
+
+
 #7 Show sales per store (money of rented films)
 #show store's city, country, manager info and total sales (money)
 #(optional) Use concat to show city and country and manager first and last name
@@ -49,7 +54,7 @@ SELECT
         sta.last_name
     ) AS 'Nombre',
     COUNT(pay.payment_id) AS 'cantidad ventas',
-    SUM(pay.amount) AS 'monto ventas',
+    SUM(pay.amount) AS 'dinero ventas',
     CONCAT(co.country, ', ', ci.city) AS 'pais y ciudad'
 FROM store sto
     INNER JOIN staff sta ON sto.manager_staff_id = sta.staff_id
@@ -59,8 +64,4 @@ FROM store sto
     INNER JOIN country co ON ci.country_id = co.country_id
 GROUP BY sto.store_id;
 
-
-#8 Which actor has appeared in the most films?
-SELECT * FROM actor ac;
-
-
+#c 42 id 107
