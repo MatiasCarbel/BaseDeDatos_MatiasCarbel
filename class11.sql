@@ -1,4 +1,4 @@
--- Active: 1654711325756@@127.0.0.1@3306
+-- Active: 1654711325756@@127.0.0.1@3306@sakila
 
 USE sakila;
 
@@ -38,25 +38,19 @@ ORDER BY
     c.store_id,
     c.last_name;
 
-#8Which actor has appeared in the most films?(no funca)
+#8Which actor has appeared in the most films?
 SELECT
     ac.actor_id,
     ac.first_name,
     ac.last_name,
-    cant,
-    t.actor_id
+    COUNT(film_id) as film_count
 FROM actor ac
-    INNER JOIN(
-        SELECT
-            COUNT(film_id) AS cant,
-            actor_id
-        FROM film_actor
-        GROUP BY actor_id
-        ORDER BY
-            cant DESC
-    ) AS t ON t.actor_id = ac.actor_id
-GROUP BY ac.actor_id
-HAVING cant;
+    INNER JOIN film_actor USING (actor_id)
+GROUP BY actor_id
+ORDER BY film_count DESC
+LIMIT 1;
+
+;
 
 #7 Show sales per store (money of rented films)
 #show store's city, country, manager info and total sales (money)
