@@ -3,7 +3,7 @@
 USE sakila;
 
 #4 Find all the film titles that are not in the inventory.
-SELECT f.title
+SELECT *
 FROM film f
     LEFT JOIN inventory i ON f.film_id = i.film_id
 WHERE i.film_id IS NULL;
@@ -12,7 +12,7 @@ WHERE i.film_id IS NULL;
 #Show title and inventory_id.
 #This exercise is complicated.
 #hint: use sub-queries in FROM and in WHERE or use left join and ask if one of the fields is null
-SELECT f.film_id, f.title
+SELECT *
 FROM film f
     INNER JOIN inventory i ON f.film_id = i.film_id
     LEFT JOIN rental r ON i.inventory_id = r.inventory_id
