@@ -100,9 +100,20 @@ UPDATE rental
 SET return_date = CURRENT_TIMESTAMP
 WHERE rental_id =16050;
 
-- #Try to delete a film
+#Try to delete a film
 #Check what happens, describe what to do.
 #Write all the necessary delete statements to entirely remove the film from the DB.
+SELECT * FROM film ORDER BY film_id DESC LIMIT 1;
+DELETE FROM film WHERE title = 'ZORRO ARK';
+#Resultado
+#Cannot delete or update a parent row: a foreign key constraint fails (`sakila`.`film_actor`,
+#CONSTRAINT `fk_film_actor_film` FOREIGN KEY (`film_id`) REFERENCES `film` (`film_id`)
+#ON UPDATE CASCADE)
+#La solucion para esto es borrar primero(en order de hijo a padre) las row a las que la pelicula esta relacionada.
+DELETE FROM;
+#Tambien se puede desactivar FOREIGN KEY CHECK pero esto no es recomendable
+
+
 - #Rent a film
 #Find an inventory id that is available for rent (available in store) pick any movie. Save this id somewhere.
 #Add a rental entry
