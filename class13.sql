@@ -1,4 +1,4 @@
--- Active: 1654711325756@@127.0.0.1@3306@sakila
+-- Active: 1654711325756@@127.0.0.1@3306
 
 USE sakila;
 
@@ -57,7 +57,8 @@ SELECT CURRENT_TIMESTAMP, (
     ),
     600,
     NULL, (
-        SELECT manager_staff_id
+        SELECT
+            manager_staff_id
         FROM store
         WHERE store_id = 2
         ORDER BY RAND()
@@ -93,30 +94,61 @@ SELECT r.rental_id
 FROM film f
     INNER JOIN inventory i USING(film_id)
     INNER JOIN rental r USING(inventory_id)
-WHERE r.return_date IS NULL ORDER BY r.rental_date DESC
+WHERE r.return_date IS NULL
+ORDER BY r.rental_date DESC
 LIMIT 1;
 
-UPDATE rental 
-SET return_date = CURRENT_TIMESTAMP
-WHERE rental_id =16050;
+UPDATE rental
+SET
+    return_date = CURRENT_TIMESTAMP
+WHERE rental_id = 16050;
 
 #Try to delete a film
 #Check what happens, describe what to do.
 #Write all the necessary delete statements to entirely remove the film from the DB.
-SELECT * FROM film ORDER BY film_id DESC LIMIT 1;
+SELECT *
+FROM film
+ORDER BY film_id DESC
+LIMIT 1;
+
 DELETE FROM film WHERE title = 'ZORRO ARK';
+
 #Resultado
 #Cannot delete or update a parent row: a foreign key constraint fails (`sakila`.`film_actor`,
 #CONSTRAINT `fk_film_actor_film` FOREIGN KEY (`film_id`) REFERENCES `film` (`film_id`)
 #ON UPDATE CASCADE)
 #La solucion para esto es borrar primero(en order de hijo a padre) las row a las que la pelicula esta relacionada.
-DELETE FROM;
-#Tambien se puede desactivar FOREIGN KEY CHECK pero esto no es recomendable
+DELETE FROM payment
+WHERE rental_id IN (
+        SELECT rental_id
+        FROM rental 
+            INNER JOIN inventory  USING(inventory_id)
+        WHERE film_id = 1000
+    );
+
+DELETE FROM rental
+WHERE inventory_id IN (
+        SELECT inventory_id
+        FROM inventory
+        WHERE film_id = 1000
+    );
+
+DELETE FROM inventory WHERE film_id = 1000;
+
+DELETE FROM film_actor WHERE film_id = 1000;
+DELETE FROM film_category WHERE film_id = 1000;
+
+DELETE FROM film WHERE title = 'ZORRO ARK';
+
+#Tambien se puede desactivar FOREIGN KEY CHECK y luego volver a activarlo, pero esto no es recomendable
 
 
-- #Rent a film
+#Rent a film
 #Find an inventory id that is available for rent (available in store) pick any movie. Save this id somewhere.
 #Add a rental entry
 #Add a payment entry
 #Use sub-queries for everything, except for the inventory id that can be used directly in the queries.
 #Once you're done. Restore the database data using the populate script from class 3.
+
+
+
