@@ -57,19 +57,12 @@ SELECT CURRENT_TIMESTAMP, (
 
 ), 600, NULL,(SELECT manager_staff_id FROM store WHERE store_id = 2 ORDER BY RAND() LIMIT 1) ;
 
-SELECT manager_staff_id FROM store WHERE store_id = 2 ORDER BY RAND() LIMIT 1;
 
-SELECT customer_id FROM customer ORDER BY rand() LIMIT 1;
-SELECT *
-FROM staff
-    INNER JOIN store ON staff.staff_id = store.manager_staff_id
-WHERE store.store_id = 2;
 
-SELECT * FROM store;
 
 SELECT * FROM rental WHERE customer_id = 600;
 
-SELECT * FROM film;
+
 
 - #Update film year based on the rating
 #For example if rating is 'G' release date will be '2001'
