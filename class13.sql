@@ -64,11 +64,35 @@ SELECT * FROM rental WHERE customer_id = 600;
 
 
 
-- #Update film year based on the rating
+#Update film year based on the rating
 #For example if rating is 'G' release date will be '2001'
 #You can choose the mapping between rating and year.
 #Write as many statements are needed.
-- #Return a film
+SELECT DISTINCT rating FROM film;
+
+UPDATE film 
+SET release_year = 2000
+WHERE rating = 'PG';
+
+UPDATE film 
+SET release_year = 2001
+WHERE rating ='G';
+
+UPDATE film 
+SET release_year = 2002
+WHERE rating ='NC-17';
+
+UPDATE film 
+SET release_year = 2003
+WHERE rating ='PG-13';
+
+UPDATE film 
+SET release_year = 2004
+WHERE rating = 'R';
+
+SELECT * FROM film WHERE rating = 'PG';
+
+#Return a film
 #Write the necessary statements and queries for the following steps.
 #Find a film that was not yet returned. And use that rental id. Pick the latest that was rented for example.
 #Use the id to return the film.
