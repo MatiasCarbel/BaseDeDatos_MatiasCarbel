@@ -54,41 +54,34 @@ SELECT CURRENT_TIMESTAMP, (
             INNER JOIN film f USING(film_id)
         WHERE
             f.title LIKE 'ACE GOLDFINGER'
-
-), 600, NULL,(SELECT manager_staff_id FROM store WHERE store_id = 2 ORDER BY RAND() LIMIT 1) ;
-
-
-
+    ),
+    600,
+    NULL, (
+        SELECT manager_staff_id
+        FROM store
+        WHERE store_id = 2
+        ORDER BY RAND()
+        LIMIT 1
+    );
 
 SELECT * FROM rental WHERE customer_id = 600;
-
-
 
 #Update film year based on the rating
 #For example if rating is 'G' release date will be '2001'
 #You can choose the mapping between rating and year.
 #Write as many statements are needed.
-SELECT DISTINCT rating FROM film;
+SELECT DISTINCT rating
+FROM film;
 
-UPDATE film 
-SET release_year = 2000
-WHERE rating = 'PG';
+UPDATE film SET release_year = 2000 WHERE rating = 'PG';
 
-UPDATE film 
-SET release_year = 2001
-WHERE rating ='G';
+UPDATE film SET release_year = 2001 WHERE rating ='G';
 
-UPDATE film 
-SET release_year = 2002
-WHERE rating ='NC-17';
+UPDATE film SET release_year = 2002 WHERE rating ='NC-17';
 
-UPDATE film 
-SET release_year = 2003
-WHERE rating ='PG-13';
+UPDATE film SET release_year = 2003 WHERE rating ='PG-13';
 
-UPDATE film 
-SET release_year = 2004
-WHERE rating = 'R';
+UPDATE film SET release_year = 2004 WHERE rating = 'R';
 
 SELECT * FROM film WHERE rating = 'PG';
 
@@ -96,6 +89,17 @@ SELECT * FROM film WHERE rating = 'PG';
 #Write the necessary statements and queries for the following steps.
 #Find a film that was not yet returned. And use that rental id. Pick the latest that was rented for example.
 #Use the id to return the film.
+SELECT r.rental_id
+FROM film f
+    INNER JOIN inventory i USING(film_id)
+    INNER JOIN rental r USING(inventory_id)
+WHERE r.return_date IS NULL ORDER BY r.rental_date DESC
+LIMIT 1;
+
+UPDATE rental 
+SET return_date = CURRENT_TIMESTAMP
+WHERE rental_id =16050;
+
 - #Try to delete a film
 #Check what happens, describe what to do.
 #Write all the necessary delete statements to entirely remove the film from the DB.
