@@ -118,11 +118,12 @@ DELETE FROM film WHERE title = 'ZORRO ARK';
 #CONSTRAINT `fk_film_actor_film` FOREIGN KEY (`film_id`) REFERENCES `film` (`film_id`)
 #ON UPDATE CASCADE)
 #La solucion para esto es borrar primero(en order de hijo a padre) las row a las que la pelicula esta relacionada.
+#Tambien se puede desactivar FOREIGN KEY CHECK y luego volver a activarlo, pero esto no es recomendable
 DELETE FROM payment
 WHERE rental_id IN (
         SELECT rental_id
-        FROM rental 
-            INNER JOIN inventory  USING(inventory_id)
+        FROM rental
+            INNER JOIN inventory USING(inventory_id)
         WHERE film_id = 1000
     );
 
@@ -136,19 +137,93 @@ WHERE inventory_id IN (
 DELETE FROM inventory WHERE film_id = 1000;
 
 DELETE FROM film_actor WHERE film_id = 1000;
+
 DELETE FROM film_category WHERE film_id = 1000;
 
 DELETE FROM film WHERE title = 'ZORRO ARK';
 
-#Tambien se puede desactivar FOREIGN KEY CHECK y luego volver a activarlo, pero esto no es recomendable
+#6
+SELECT inventory_id, film_id
+FROM inventory
+WHERE inventory_id NOT IN (
+        SELECT inventory_id
+        FROM inventory
+            INNER JOIN rental USING (inventory_id)
+        WHERE
+            return_date IS NULL
+    );
 
+#(no funciona porque si no tiene rental aparece lo mismo ej: inventory_id 5)
+SELECT *
+FROM inventory i
+    LEFT JOIN rental r USING(inventory_id)
+WHERE r.return_date IS NULL;
 
-#Rent a film
-#Find an inventory id that is available for rent (available in store) pick any movie. Save this id somewhere.
-#Add a rental entry
-#Add a payment entry
-#Use sub-queries for everything, except for the inventory id that can be used directly in the queries.
-#Once you're done. Restore the database data using the populate script from class 3.
+#inventory_id 1 film_id 1
+INSERT INTO
+    rental (
+        rental_date,
+        inventory_id,
+        customer_id,
+        return_date,
+        staff_id
+    )
+VALUES(
+        CURRENT_TIMESTAMP, 10, (
+            SELECT
+                customer_id
+            FROM customer
+            ORDER BY RAND()
+            LIMIT 1
+        ), NULL, (
+            SELECT staff_id
+            FROM staff
+            WHERE store_id IN(
+                    SELECT
+                        store_id
+                    FROM
+                        inventory
+                    WHERE
+                        inventory_id = 1
+                )
+        )
+    );
 
+INSERT INTO
+    payment (
+        customer_id,
+        staff_id,
+        rental_id,
+        amount,
+        payment_date
+    )
+VALUES( (#customer_id
+            SELECT
+                customer_id
+            FROM rental r
+            ORDER BY
+                rental_date DESC
+            LIMIT 1
+        ), (#staff_id
+            SELECT staff_id
+            FROM rental r
+            ORDER BY
+                rental_date DESC
+            LIMIT 1
+        ), (#rental_id
+            SELECT rental_id
+            FROM rental r
+            ORDER BY
+                rental_date DESC
+            LIMIT 1
+        ), 10, CURRENT_TIMESTAMP
+    );
 
+SELECT * FROM payment ORDER BY payment_date DESC LIMIT 1;
 
+/*
+SELECT staff_id, customer_id, rental_id
+FROM rental r
+ORDER BY rental_date DESC
+LIMIT 1;
+*/
