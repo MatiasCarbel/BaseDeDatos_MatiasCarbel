@@ -115,7 +115,37 @@ NCHAR	Converts value to NCHAR (like CHAR, but produces a string with the nationa
 SIGNED	Converts value to SIGNED (a signed 64-bit integer)
 UNSIGNED	Converts value to UNSIGNED (an unsigned 64-bit integer)
 BINARY
-
 */
 
-/*6*/
+/*6 Investigate NVL, ISNULL, IFNULL, COALESCE, etc type of function.
+ Explain what they do. Which ones are not in MySql and write usage examples.
+
+IFNULL(): lets you return an alternative value if the expression is null
+SELECT ProductName, UnitPrice * (UnitsInStock + IFNULL(UnitsOnOrder, 0))
+FROM Products; 
+(supported by mysql)
+
+COALESCE: returns the first non-NULL argument. In case all arguments are NULL,
+returns NULL:
+SELECT COALESCE(NULL, 0);  -- 0
+SELECT COALESCE(NULL, NULL); -- NULL
+(supported by mysql)
+
+
+ISNULL() function lets you return an alternative value when an expression is NULL:
+SELECT ProductName, UnitPrice * (UnitsInStock + ISNULL(UnitsOnOrder, 0))
+FROM Products;
+(supported by sqlserver)
+
+
+IsNull() function returns TRUE (-1) if the expression is a null value, otherwise FALSE (0):
+SELECT ProductName, UnitPrice * (UnitsInStock + IIF(IsNull(UnitsOnOrder), 0, UnitsOnOrder))
+FROM Products;
+(supported by MS Access)
+
+
+NVL() function achieves the same result:
+SELECT ProductName, UnitPrice * (UnitsInStock + NVL(UnitsOnOrder, 0))
+FROM Products;
+ (supported by oracle)
+*/
