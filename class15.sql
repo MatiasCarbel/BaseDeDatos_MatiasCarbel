@@ -67,4 +67,48 @@ GROUP BY film_id, ca.name;
 
 SELECT * FROM film_details;
 
-#3 #4 #5 
+#3
+CREATE
+OR
+REPLACE
+    VIEW sales_by_film_category AS
+SELECT
+    ca.name,
+    COUNT(r.rental_id) AS total_rental
+FROM film
+    INNER JOIN film_category USING(film_id)
+    INNER JOIN category ca USING(category_id)
+    INNER JOIN inventory USING(film_id)
+    INNER JOIN rental r USING(inventory_id)
+GROUP BY ca.name;
+
+SELECT * FROM sales_by_film_category;
+
+#4
+CREATE
+OR
+REPLACE
+    VIEW actor_information AS
+SELECT
+    a.actor_id,
+    CONCAT(a.first_name, ' ', a.last_name) AS 'Actor',
+    COUNT(film_id) AS 'Films Acted'
+FROM actor a
+    INNER JOIN film_actor USING(actor_id)
+    INNER JOIN film USING(film_id)
+GROUP BY a.actor_id
+ORDER BY a.last_name;
+
+SELECT * FROM actor_information;
+#5
+SHOW CREATE VIEW actor_info;
+
+#6
+/*A Materialized View (MV) is the pre-calculated (materialized) result of a query.
+Unlike a simple VIEW the result of a Materialized View is stored somewhere,
+generally in a table. Materialized Views are used when immediate response is needed
+and the query where the Materialized View bases on would take to long to produce a result.
+MySQL does not provide Materialized Views by itself. But it is easy to build Materialized Views yourself.
+Materialized Views have to be refreshed once in a while.
+https://fromdual.com/mysql-materialized-views#what_is
+*/
