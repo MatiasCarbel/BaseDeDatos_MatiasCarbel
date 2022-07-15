@@ -1,0 +1,93 @@
+-- Active: 1654711325756@@127.0.0.1@3306@clase16
+
+/*
+*1 DONE
+*/
+CREATE DATABASE clase16;
+
+USE clase16;
+
+CREATE TABLE
+    `employees` (
+        `employeeNumber` int(11) NOT NULL,
+        `lastName` varchar(50) NOT NULL,
+        `firstName` varchar(50) NOT NULL,
+        `extension` varchar(10) NOT NULL,
+        `email` varchar(100) NOT NULL,
+        `officeCode` varchar(10) NOT NULL,
+        `reportsTo` int(11) DEFAULT NULL,
+        `jobTitle` varchar(50) NOT NULL,
+        PRIMARY KEY (`employeeNumber`)
+    );
+
+insert  into `employees`(`employeeNumber`,`lastName`,`firstName`,`extension`,`email`,`officeCode`,`reportsTo`,`jobTitle`) values 
+
+(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',NULL,'President'),
+
+(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',1002,'VP Sales'),
+
+(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',1002,'VP Marketing');
+
+CREATE TABLE employees_audit (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    employeeNumber INT NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    changedat DATETIME DEFAULT NULL,
+    action VARCHAR(50) DEFAULT NULL
+);
+INSERT INTO
+    employees(
+        employeeNumber,
+        lastName,
+        firstName,
+        extension,
+        email,
+        officecode,
+        reportsTo,
+        jobTitle
+    ) VALUES (1,'Carbel','Matias','a',NULL,'1',1002,'Worker');
+
+/*Column 'email' cannot be null. esto es debido a la constraint que tiene el campo email
+la cual no lo deja ser null*/
+
+
+
+/*
+*2 DONE
+*/
+UPDATE employees SET employeeNumber = employeeNumber - 20;
+#se le resto 20 a los employeeNumber de todos los employee
+
+UPDATE employees SET employeeNumber = employeeNumber + 20;
+#Duplicate entry '1056' for key 'PRIMARY'. no sucede nada ya que si se sumaran 20
+#habria 2 primary keys exactas por un momento
+SELECT * FROM employees;
+
+
+
+
+
+/*
+*3
+TODO
+
+*/ 
+ALTER TABLE employees ADD age int(2);
+
+DELETE FROM employees WHERE employeeNumber = 2;
+
+ALTER TABLE employees DROP age;
+
+INSERT INTO
+    employees(
+        employeeNumber,
+        lastName,
+        firstName,
+        extension,
+        email,
+        officecode,
+        reportsTo,
+        jobTitle,
+        age
+    ) VALUES (2,'Pedro','Sanchez','b','pedroGmail','1',1002,'Worker', 15);
+
