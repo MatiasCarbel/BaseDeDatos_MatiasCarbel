@@ -159,4 +159,3 @@ for which you don't have any corresponding row in the parent table. It prevents 
 for example in the table film_actor you shouldnt be able to enter a film_id that doesnt exist in the table film. The same with the actor_id. 
 */
 #https://javarevisited.blogspot.com/2012/12/what-is-referential-integrity-in-database-sql-mysql-example-tutorial.html
-
