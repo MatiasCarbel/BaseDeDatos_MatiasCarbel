@@ -1,8 +1,9 @@
 -- Active: 1654711325756@@127.0.0.1@3306@clase16
 
 /*
-*1 DONE
-*/
+ *1 DONE
+ */
+
 CREATE DATABASE clase16;
 
 USE clase16;
@@ -20,21 +21,55 @@ CREATE TABLE
         PRIMARY KEY (`employeeNumber`)
     );
 
-insert  into `employees`(`employeeNumber`,`lastName`,`firstName`,`extension`,`email`,`officeCode`,`reportsTo`,`jobTitle`) values 
+insert into
+    `employees`(
+        `employeeNumber`,
+        `lastName`,
+        `firstName`,
+        `extension`,
+        `email`,
+        `officeCode`,
+        `reportsTo`,
+        `jobTitle`
+    )
+values (
+        1002,
+        'Murphy',
+        'Diane',
+        'x5800',
+        'dmurphy@classicmodelcars.com',
+        '1',
+        NULL,
+        'President'
+    ), (
+        1056,
+        'Patterson',
+        'Mary',
+        'x4611',
+        'mpatterso@classicmodelcars.com',
+        '1',
+        1002,
+        'VP Sales'
+    ), (
+        1076,
+        'Firrelli',
+        'Jeff',
+        'x9273',
+        'jfirrelli@classicmodelcars.com',
+        '1',
+        1002,
+        'VP Marketing'
+    );
 
-(1002,'Murphy','Diane','x5800','dmurphy@classicmodelcars.com','1',NULL,'President'),
+CREATE TABLE
+    employees_audit (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        employeeNumber INT NOT NULL,
+        lastname VARCHAR(50) NOT NULL,
+        changedat DATETIME DEFAULT NULL,
+        action VARCHAR(50) DEFAULT NULL
+    );
 
-(1056,'Patterson','Mary','x4611','mpatterso@classicmodelcars.com','1',1002,'VP Sales'),
-
-(1076,'Firrelli','Jeff','x9273','jfirrelli@classicmodelcars.com','1',1002,'VP Marketing');
-
-CREATE TABLE employees_audit (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    employeeNumber INT NOT NULL,
-    lastname VARCHAR(50) NOT NULL,
-    changedat DATETIME DEFAULT NULL,
-    action VARCHAR(50) DEFAULT NULL
-);
 INSERT INTO
     employees(
         employeeNumber,
@@ -45,38 +80,49 @@ INSERT INTO
         officecode,
         reportsTo,
         jobTitle
-    ) VALUES (1,'Carbel','Matias','a',NULL,'1',1002,'Worker');
+    )
+VALUES (
+        1,
+        'Carbel',
+        'Matias',
+        'a',
+        NULL,
+        '1',
+        1002,
+        'Worker'
+    );
 
 /*Column 'email' cannot be null. esto es debido a la constraint que tiene el campo email
-la cual no lo deja ser null*/
-
-
+ la cual no lo deja ser null*/
 
 /*
-*2 DONE
-*/
-UPDATE employees SET employeeNumber = employeeNumber - 20;
-#se le resto 20 a los employeeNumber de todos los employee
+ *2 DONE
+ */
 
-UPDATE employees SET employeeNumber = employeeNumber + 20;
+UPDATE employees SET employeeNumber = employeeNumber - 20;
+
+#se le resto 20 a los employeeNumber de todos los employee
+UPDATE employees
+SET
+    employeeNumber = employeeNumber + 20;
+
 #Duplicate entry '1056' for key 'PRIMARY'. no sucede nada ya que si se sumaran 20
 #habria 2 primary keys exactas por un momento
-SELECT * FROM employees;
-
-
-
-
+SELECT *
+FROM employees;
 
 /*
-*3
-TODO
+ *3
+ TODO
+ */
 
-*/ 
-ALTER TABLE employees ADD age int(2);
-
-DELETE FROM employees WHERE employeeNumber = 2;
+ALTER TABLE employees ADD age int CHECK(
+        age >= 16
+        AND age <= 70
+    );
 
 ALTER TABLE employees DROP age;
+
 
 INSERT INTO
     employees(
@@ -89,5 +135,28 @@ INSERT INTO
         reportsTo,
         jobTitle,
         age
-    ) VALUES (2,'Pedro','Sanchez','b','pedroGmail','1',1002,'Worker', 15);
+    )
+VALUES (
+        2,
+        'Pedro',
+        'Sanchez',
+        'b',
+        'pedroGmail',
+        '1',
+        1002,
+        'Worker',
+        1
+    );
+
+
+DELETE FROM employees WHERE employeeNumber = 2;
+
+
+/*
+ *4
+Referential Integrity is a set of constraints applied to foreign keys which prevents entering a row in the child table 
+for which you don't have any corresponding row in the parent table. It prevents having incorrect or incomplete relationships.
+for example in the table film_actor you shouldnt be able to enter a film_id that doesnt exist in the table film. The same with the actor_id. 
+*/
+#https://javarevisited.blogspot.com/2012/12/what-is-referential-integrity-in-database-sql-mysql-example-tutorial.html
 
