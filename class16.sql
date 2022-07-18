@@ -156,6 +156,23 @@ DELETE FROM employees WHERE employeeNumber = 2;
  *4
 Referential Integrity is a set of constraints applied to foreign keys which prevents entering a row in the child table 
 for which you don't have any corresponding row in the parent table. It prevents having incorrect or incomplete relationships.
-for example in the table film_actor you shouldnt be able to enter a film_id that doesnt exist in the table film. The same with the actor_id. 
+for example in the table film_actor you shouldnt be able to enter a film_id that doesnt exist in the table film. The same with the actor_id.
+https://javarevisited.blogspot.com/2012/12/what-is-referential-integrity-in-database-sql-mysql-example-tutorial.html
 */
-#https://javarevisited.blogspot.com/2012/12/what-is-referential-integrity-in-database-sql-mysql-example-tutorial.html
+
+/*
+*5
+*/
+ALTER TABLE employees ADD COLUMN lastUpdate TIMESTAMP;
+ALTER TABLE employees ADD COLUMN lastUpdateUser VARCHAR(255);
+
+DELIMITER $$
+CREATE Trigger before_employee_update BEFORE UPDATE ON employees FOR EACH ROW
+BEGIN
+SET NEW.lastUpdate = CURRENT_TIMESTAMP;
+SET NEW.lastUpdateUser = CURRENT_USER;
+END$$
+DELIMITER;
+
+
+UPDATE employees SET age = 15 WHERE employeeNumber = 2;
