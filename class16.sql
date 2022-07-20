@@ -1,4 +1,4 @@
--- Active: 1654711325756@@127.0.0.1@3306@clase16
+-- Active: 1654711325756@@127.0.0.1@3306@sakila
 
 /*
  *1 DONE
@@ -160,6 +160,7 @@ for example in the table film_actor you shouldnt be able to enter a film_id that
 https://javarevisited.blogspot.com/2012/12/what-is-referential-integrity-in-database-sql-mysql-example-tutorial.html
 */
 
+
 /*
 *5
 */
@@ -176,3 +177,9 @@ DELIMITER;
 
 
 UPDATE employees SET age = 15 WHERE employeeNumber = 2;
+
+
+/*
+*6
+*/
+SHOW TRIGGERS FROM sakila;
