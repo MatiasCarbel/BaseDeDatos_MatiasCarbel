@@ -183,3 +183,26 @@ UPDATE employees SET age = 15 WHERE employeeNumber = 2;
 *6
 */
 SHOW TRIGGERS FROM sakila;
+
+/* ins_film after a film is inserted this trigger inserts the film_id,title and description to film_text */
+BEGIN
+    INSERT INTO film_text (film_id, title, description)
+        VALUES (new.film_id, new.title, new.description);
+  END
+
+/* upd_film updates the title, description and film_id of film_text whenever an update, that changes either title, description or film_id of a film, is made */
+BEGIN
+    IF (old.title != new.title) OR (old.description != new.description) OR (old.film_id != new.film_id)
+    THEN
+        UPDATE film_text
+            SET title=new.title,
+                description=new.description,
+                film_id=new.film_id
+        WHERE film_id=old.film_id;
+    END IF;
+  END
+
+  /* del_film deletes the film_text of the erased film*/
+  BEGIN
+    DELETE FROM film_text WHERE film_id = old.film_id;
+  END
