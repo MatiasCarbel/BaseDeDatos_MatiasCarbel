@@ -175,7 +175,6 @@ SET NEW.lastUpdateUser = CURRENT_USER;
 END$$
 DELIMITER;
 
-
 UPDATE employees SET age = 15 WHERE employeeNumber = 2;
 
 
