@@ -163,8 +163,10 @@ group by
     `a`.`last_name`;
 
 /*
- it returns the first and last name of every actor, next to a column called film_info which contains each film the actor has appeared on , divided by categories(categorie_name:film_title).
- */
+ it returns the first and last name of every actor, next to a column called film_info which contains 
+ each film the actor has appeared on, divided by categories(categorie_name:film_title).
+
+*/
 
 #6
 /*A Materialized View (MV) is the pre-calculated (materialized) result of a query.
