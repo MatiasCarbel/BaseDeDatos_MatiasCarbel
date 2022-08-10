@@ -112,8 +112,7 @@ SELECT *
 FROM employees;
 
 /*
- *3
- TODO
+ *3 DONE
  */
 
 ALTER TABLE employees ADD age int CHECK(
