@@ -100,15 +100,78 @@ GROUP BY a.actor_id
 ORDER BY a.last_name;
 
 SELECT * FROM actor_information;
+
 #5
-SHOW CREATE VIEW actor_info;
+SELECT VIEW_DEFINITION
+FROM INFORMATION_SCHEMA.VIEWS
+WHERE TABLE_NAME = 'actor_info';
+
+select
+    `a`.`actor_id` AS `actor_id`,
+    `a`.`first_name` AS `first_name`,
+    `a`.`last_name` AS `last_name`,
+    group_concat(
+        distinct concat(
+            `c`.`name`,
+            ': ', (
+                select
+                    group_concat(
+                        `f`.`title`
+                        order by
+                            `f`.`title` ASC separator ', '
+                    )
+                from ( (
+                            `sakila`.`film` `f`
+                            join `sakila`.`film_category` `fc` on( (`f`.`film_id` = `fc`.`film_id`)
+                            )
+                        )
+                        join `sakila`.`film_actor` `fa` on( (`f`.`film_id` = `fa`.`film_id`)
+                        )
+                    )
+                where ( (
+                            `fc`.`category_id` = `c`.`category_id`
+                        )
+                        and (
+                            `fa`.`actor_id` = `a`.`actor_id`
+                        )
+                    )
+            )
+        )
+        order by
+            `c`.`name` ASC separator '; '
+    ) AS `film_info`
+from ( ( (
+                `sakila`.`actor` `a`
+                left join `sakila`.`film_actor` `fa` on( (
+                        `a`.`actor_id` = `fa`.`actor_id`
+                    )
+                )
+            )
+            left join `sakila`.`film_category` `fc` on( (
+                    `fa`.`film_id` = `fc`.`film_id`
+                )
+            )
+        )
+        left join `sakila`.`category` `c` on( (
+                `fc`.`category_id` = `c`.`category_id`
+            )
+        )
+    )
+group by
+    `a`.`actor_id`,
+    `a`.`first_name`,
+    `a`.`last_name`;
+
+/*
+ it returns the first and last name of every actor, next to a column called film_info which contains each film the actor has appeared on , divided by categories(categorie_name:film_title).
+ */
 
 #6
 /*A Materialized View (MV) is the pre-calculated (materialized) result of a query.
-Unlike a simple VIEW the result of a Materialized View is stored somewhere,
-generally in a table. Materialized Views are used when immediate response is needed
-and the query where the Materialized View bases on would take to long to produce a result.
-MySQL does not provide Materialized Views by itself. But it is easy to build Materialized Views yourself.
-Materialized Views have to be refreshed once in a while.
-https://fromdual.com/mysql-materialized-views#what_is
-*/
+ Unlike a simple VIEW the result of a Materialized View is stored somewhere,
+ generally in a table. Materialized Views are used when immediate response is needed
+ and the query where the Materialized View bases on would take to long to produce a result.
+ MySQL does not provide Materialized Views by itself. But it is easy to build Materialized Views yourself.
+ Materialized Views have to be refreshed once in a while.
+ https://fromdual.com/mysql-materialized-views#what_is
+ */
