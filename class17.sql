@@ -53,8 +53,7 @@ WHERE
 #faster
 SELECT f.description
 FROM film f
-WHEREAdds the filetype django-html
-
+WHERE
     MATCH(f.description) AGAINST('Epic' IN NATURAL LANGUAGE MODE);
 
 /*The match against query is faster. This is due to the fact that 
