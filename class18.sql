@@ -99,18 +99,14 @@ FROM customer c
 WHERE co.country = 'Argentina';
 
 #------------------------------------------------------------------
-#selecciona primero
 DELIMITER $
 DROP PROCEDURE IF EXISTS list_procedure $
 
-CREATE PROCEDURE list_procedure(
-	IN co_name VARCHAR(250)
-	) 
-BEGIN 
-	DECLARE finished INT DEFAULT 0;
-	DECLARE f_name VARCHAR(250) DEFAULT ''; 
-	DECLARE l_name VARCHAR(250) DEFAULT '';
-	DECLARE list VARCHAR(300);
+CREATE PROCEDURE list_procedure(IN co_name VARCHAR(250))
+BEGIN
+	DECLARE f_name VARCHAR(250);
+	DECLARE l_name VARCHAR(250);
+	DECLARE finished BOOLEAN DEFAULT FALSE;
 
 	DECLARE cursList CURSOR FOR
 	SELECT
@@ -119,33 +115,38 @@ BEGIN
 	FROM customer c
 	    INNER JOIN address USING(address_id)
 	    INNER JOIN city USING(city_id)
-	    INNER JOIN country co USING(country_id)
-	WHERE co_name = co.country;
-	
-	DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+	    INNER JOIN country co USING(country_id) WHERE co.country = co_name;
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = TRUE;
+
+	DROP TEMPORARY TABLE IF EXISTS tempTable;
+
+	CREATE TEMPORARY TABLE tempTable(first_name VARCHAR(250), last_name VARCHAR(250));
+
 
 	OPEN cursList;
 
 	looplabel: LOOP
-		FETCH cursList INTO f_name, l_name;
-		IF finished = 1 THEN
-			LEAVE looplabel;
-		END IF;
+	FETCH cursList INTO f_name,l_name;
 
-		SET list = CONCAT(f_name,';',l_name);
+	IF finished = TRUE THEN
+		LEAVE looplabel;
+	END IF;
 
-		SELECT list;#devuelve primero
+	INSERT INTO tempTable(first_name,last_name) VALUES (f_name, l_name);
 
-	END LOOP looplabel;
-	-- SELECT list; devuelve ultimo
+	END LOOP looplabel;	
+
 	CLOSE cursList;
-	
 
+	SELECT CONCAT(first_name,';',last_name) FROM tempTable;
 END $
+
+CALL list_procedure('Argentina') $
 DELIMITER ;
 
-CALL list_procedure('Argentina');
 #3 
 SHOW CREATE FUNCTION inventory_in_stock;
 
 SHOW CREATE PROCEDURE film_in_stock;
+
