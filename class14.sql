@@ -1,5 +1,4 @@
 -- Active: 1654711325756@@127.0.0.1@3306@sakila
-
 USE sakila;
 
 /*1 Write a query that gets all the customers that live in Argentina. 

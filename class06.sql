@@ -247,3 +247,4 @@ WHERE
     )
 GROUP BY
     c.customer_id;
+    

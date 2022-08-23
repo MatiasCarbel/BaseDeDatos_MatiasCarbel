@@ -3,7 +3,6 @@
 /*
  *1 DONE
  */
-
 CREATE DATABASE clase16;
 
 USE clase16;
