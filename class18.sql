@@ -35,8 +35,6 @@ DELIMITER ;
 SELECT get_amount(1,1);
 
 #2(no usar ws usar cursor) 
-
-#selecciona ultimo
 DELIMITER $
 
 DROP PROCEDURE IF EXISTS list_procedure $
@@ -145,8 +143,62 @@ END $
 CALL list_procedure('Argentina') $
 DELIMITER ;
 
-#3 
+#3
+SELECT inventory_in_stock(1);  
 SHOW CREATE FUNCTION inventory_in_stock;
+/*
+CREATE FUNCTION `inventory_in_stock`(p_inventory_id INT) RETURNS tinyint(1)
+BEGIN
+    DECLARE v_rentals INT;
+    DECLARE v_out     INT;
 
+
+    SELECT COUNT(*) INTO v_rentals
+    FROM rental
+    WHERE inventory_id = p_inventory_id;
+
+    IF v_rentals = 0 THEN
+      RETURN TRUE;
+    END IF;
+
+    SELECT COUNT(rental_id) INTO v_out
+    FROM inventory LEFT JOIN rental USING(inventory_id)
+    WHERE inventory.inventory_id = p_inventory_id
+    AND rental.return_date IS NULL;
+
+    IF v_out > 0 THEN
+      RETURN FALSE;
+    ELSE
+      RETURN TRUE;
+    END IF;
+END
+
+it returns 0 or 1 depending on whether there is stock of a film, or not. 
+1 representing the availability of a film and 0 the opposite.
+
+*/
+
+CALL film_in_stock(2,2,@a);
+SELECT @a;
 SHOW CREATE PROCEDURE film_in_stock;
+/*
+CREATE PROCEDURE `film_in_stock`(IN p_film_id INT, IN p_store_id INT, OUT p_film_count INT)
+BEGIN
+     SELECT inventory_id
+     FROM inventory
+     WHERE film_id = p_film_id
+     AND store_id = p_store_id
+     AND inventory_in_stock(inventory_id);
+
+     SELECT COUNT(*)
+     FROM inventory
+     WHERE film_id = p_film_id
+     AND store_id = p_store_id
+     AND inventory_in_stock(inventory_id)
+     INTO p_film_count;
+END
+
+it selects the inventory_ids of a film in stock, using two IN parameters for the film_id and store_id.
+It also counts how many there are and returns it with an OUT parameter. 
+*/
 
