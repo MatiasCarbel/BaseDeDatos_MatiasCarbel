@@ -27,8 +27,7 @@ BEGIN
 	    f.film_id = f_id
 	    AND st.store_id = st_id;
 	RETURN (cant);
-	END E 
-END END $ 
+	END$ 
 
 DELIMITER ;
 
